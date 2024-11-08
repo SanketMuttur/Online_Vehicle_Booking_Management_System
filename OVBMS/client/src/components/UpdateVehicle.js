@@ -37,7 +37,11 @@ function UpdateVehicles() {
                     Vehicle_Overview: data.vehicle_overview
                 });
             } catch (error) {
-                console.log(error);
+                if (err.response && err.response.status === 401) {
+                    navigate("/AdminLogin");
+                } else {
+                    console.log(error)
+                }
             }
         };
         fetchVehicleInfo();
@@ -54,7 +58,11 @@ function UpdateVehicles() {
             alert(`Vehicle with License plate ${vehicle_license_no} updated Successfully!`)
             navigate("/Admin")
         } catch (error) {
-            console.log(error)
+            if (err.response && err.response.status === 401) {
+                navigate("/AdminLogin");
+            } else {
+                console.log(error)
+            }
         }
     }
 

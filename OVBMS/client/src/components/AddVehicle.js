@@ -29,7 +29,11 @@ function AddVehicle() {
             alert("New Vehicle added successfully!")
             navigate("/Admin")
         } catch (error) {
-            console.log(error)
+            if (err.response && err.response.status === 401) {
+                navigate("/AdminLogin");
+            } else {
+                setErr(err.response.data)
+            }
         }
     }
 

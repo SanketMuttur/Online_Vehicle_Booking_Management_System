@@ -7,6 +7,28 @@ import cookieParser from 'cookie-parser'
 
 const app = express()
 
+const adminAuthenticateToken = (req, res, next) => {
+    const token = req.cookies.admin_access_token;
+    if (!token) return res.status(401).json("Access Denied");
+  
+    jwt.verify(token, "adminjwtkey", (err, user) => {
+      if (err) return res.status(403).json("Invalid Token");
+      req.user = user;
+      next();
+    });
+};
+
+const userAuthenticateToken = (req, res, next) => {
+    const token = req.cookies.access_token;
+    if (!token) return res.status(401).json("Access Denied");
+  
+    jwt.verify(token, "userjwtkey", (err, user) => {
+      if (err) return res.status(403).json("Invalid Token");
+      req.user = user;
+      next();
+    });
+};
+
 const db = mysql.createConnection({
     host:"localhost",
     user:"root",
@@ -107,7 +129,7 @@ app.post("/AdminLogin", (req, res) =>{
     })
 })
 
-app.post("/AddAdmin", (req, res)=>{
+app.post("/AddAdmin", adminAuthenticateToken, (req, res)=>{
 
     const q = 'select * from manager where email = ?'
 
@@ -132,14 +154,14 @@ app.post("/AddAdmin", (req, res)=>{
     })
 })
 
-app.post("/AdminLogout", (req, res) => {
+app.post("/AdminLogout", adminAuthenticateToken, (req, res) => {
     res.clearCookie("admin_access_token", {
         sameSite:"none",
         secure:true
     }).status(200).json("Admin has been Logged Out!")
 })
 
-app.get("/Admin",(req, res)=>{
+app.get("/Admin", adminAuthenticateToken, (req, res)=>{
     const q = 'SELECT * FROM ovbms.vehicles;'
     db.query(q, (err, data)=>{
         if(err) return res.json(err)
@@ -155,7 +177,7 @@ app.get("/VehicleListings",(req, res)=>{
     })
 })
 
-app.post("/AddVehicle", (req, res)=>{
+app.post("/AddVehicle", adminAuthenticateToken, (req, res)=>{
     const q = 'insert into vehicles (License_No, Vehicle_Name, Model_Year, Price_Per_Day, Seating_Capacity, Fuel_Type, Vehicle_Image, Vehicle_Overview) values (?)';
     const values = [
         req.body.License_No,
@@ -174,7 +196,7 @@ app.post("/AddVehicle", (req, res)=>{
     })
 })
 
-app.delete("/Admin/:id", (req, res) => {
+app.delete("/Admin/:id", adminAuthenticateToken, (req, res) => {
     const License_No = req.params.id
     const q = 'delete from vehicles where license_no = ?'
 
@@ -184,7 +206,7 @@ app.delete("/Admin/:id", (req, res) => {
     })
 })
 
-app.get("/UpdateVehicle/:id", (req, res) => {
+app.get("/UpdateVehicle/:id", adminAuthenticateToken, (req, res) => {
     const vehicle_license_no = req.params.id
     const q = 'SELECT * FROM vehicles WHERE License_No = ?'
 
@@ -194,7 +216,7 @@ app.get("/UpdateVehicle/:id", (req, res) => {
     });
 });
 
-app.put("/UpdateVehicle/:id", (req, res) => {
+app.put("/UpdateVehicle/:id", adminAuthenticateToken, (req, res) => {
     const vehicle_license_no = req.params.id
     const q = 'update vehicles set `License_No`=?, `Vehicle_Name`=?, `Model_Year`=?, `Price_Per_Day`=?, `Seating_Capacity`=?, `Fuel_Type`=?, `Vehicle_Image`=?, `Vehicle_Overview`=? where License_No = ?'
 

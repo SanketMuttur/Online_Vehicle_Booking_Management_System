@@ -26,7 +26,11 @@ function AddAdmin() {
         alert("Added Admin Successfully")
         navigate("/Admin")
     } catch (err) {
-      setErr(err.response.data)
+      if (err.response && err.response.status === 401) {
+        navigate("/AdminLogin");
+      } else {
+        setErr(err.response.data)
+      }
     }
   }
 

@@ -1,5 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import axios from "axios";
+import { Navigate } from "react-router-dom";
 
 export const AuthContext = createContext()
 
@@ -20,7 +21,14 @@ export const AuthContextProvider = ({children}) => {
         localStorage.setItem("user", JSON.stringify(CurrentUser))
     }, [CurrentUser])
 
+    const ProtectedUserRoute = ({ element }) => {
+        if (!CurrentUser) {
+            return <Navigate to="/UserSignIn" />;
+        }
+        return element;
+    };
+
     return(
-        <AuthContext.Provider value={{CurrentUser, UserSignIn, UserSignOut}}>{children}</AuthContext.Provider>
+        <AuthContext.Provider value={{CurrentUser, UserSignIn, UserSignOut, ProtectedUserRoute }}>{children}</AuthContext.Provider>
     )
 }

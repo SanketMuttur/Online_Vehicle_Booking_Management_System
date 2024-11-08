@@ -3,9 +3,11 @@ import { useState } from 'react'
 import { useEffect } from 'react'
 import axios from 'axios'
 import AdminNavbar from './AdminNavbar'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 function Admin() {
+
+  const navigate = useNavigate()
 
   const [VehicleInfo, setVehicleInfo] = useState([])
 
@@ -15,7 +17,11 @@ function Admin() {
         const res = await axios.get("http://localhost:5000/Admin")
         setVehicleInfo(res.data)
       } catch (error) {
-        console.log(error)
+        if (error.response && error.response.status === 401) {
+          navigate("/AdminLogin");
+        } else {
+          console.log(error)
+        }
       }
     }
     fetchCarinfo()
@@ -27,7 +33,11 @@ function Admin() {
       window.location.reload()
       alert(`Vehicle with License plate ${id} deleted successfully!`)
     } catch (error) {
-      console.log(error)
+      if (err.response && err.response.status === 401) {
+        navigate("/AdminLogin");
+      } else {
+        console.log(error)
+      }
     }
   }
 
