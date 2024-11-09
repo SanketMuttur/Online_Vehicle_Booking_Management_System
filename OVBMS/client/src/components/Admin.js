@@ -33,7 +33,7 @@ function Admin() {
       window.location.reload()
       alert(`Vehicle with License plate ${id} deleted successfully!`)
     } catch (error) {
-      if (err.response && err.response.status === 401) {
+      if (error.response && error.response.status === 401) {
         navigate("/AdminLogin");
       } else {
         console.log(error)

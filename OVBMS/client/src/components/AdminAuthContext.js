@@ -1,8 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-
-const navigate = useNavigate()
+import { Navigate } from "react-router-dom";
 
 export const AdminAuthContext = createContext();
 
@@ -19,10 +17,10 @@ export const AdminAuthContextProvider = ({ children }) => {
             await axios.post("http://localhost:5000/AdminLogout", {});
             setCurrentAdmin(null);
         } catch (error) {
-            if (err.response && err.response.status === 401) {
-                navigate("/AdminLogin");
+            if (error.response && error.response.status === 401) {
+                return <Navigate to="/AdminLogin" />;
               } else {
-                setErr(err.response.data)
+                console.log(error)
               }
         }
         
@@ -34,7 +32,7 @@ export const AdminAuthContextProvider = ({ children }) => {
 
     const ProtectedAdminRoute = ({ element }) => {
         if (!CurrentAdmin) {
-            navigate("/AdminLogin");
+            return <Navigate to="/AdminLogin" />;
         }
         return element;
     };
