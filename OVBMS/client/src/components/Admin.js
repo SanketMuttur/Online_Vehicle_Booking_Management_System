@@ -1,18 +1,15 @@
-import React from 'react'
-import { useState } from 'react'
-import { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import AdminNavbar from './AdminNavbar'
 import { Link, useNavigate } from 'react-router-dom'
 
 function Admin() {
-
   const navigate = useNavigate()
 
   const [VehicleInfo, setVehicleInfo] = useState([])
 
-  useEffect(()=>{
-    const fetchCarinfo = async()=>{
+  useEffect(() => {
+    const fetchCarinfo = async () => {
       try {
         const res = await axios.get("http://localhost:5000/Admin")
         setVehicleInfo(res.data)
@@ -25,11 +22,11 @@ function Admin() {
       }
     }
     fetchCarinfo()
-  },[])
+  }, [])
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete("http://localhost:5000/Admin/"+id)
+      await axios.delete(`http://localhost:5000/Admin/${id}`)
       window.location.reload()
       alert(`Vehicle with License plate ${id} deleted successfully!`)
     } catch (error) {
@@ -44,44 +41,38 @@ function Admin() {
   return (
     <div>
       <AdminNavbar />
-      <div className='d-flex bg-secondary justify-content-center align-items-center vh-100 mt-5'>
-        <div className="container text-center bg-light p-4 rounded-5 shadow">
-        <h1 className="my-4">Manage Vehicles</h1>
-        <div className='table-responsive'>
-          <table className="table table-bordered table-hover">
-            <thead className="thead-light">
-              <tr>
-                <th>Vehicle_Image</th>
-                <th>Vehicle_Name</th>
-                <th>Price_Per_Day</th>
-                <th>Fuel_Type</th>
-                <th>Model_Year</th>
-                <th>Seating_Capacity</th>
-                <th>Update_Car_Info</th>
-                <th>Delete_Car</th>
-              </tr>
-            </thead>
-            <tbody>
-              {VehicleInfo.map((car) => (
-                <tr key={car.license_no} className="align-middle">
-                  <td><img src={car.vehicle_image} className="img-fluid rounded" alt={car.vehicle_name} style={{ maxWidth: '200px', height: 'auto'}}></img></td>
-                  <td>{car.vehicle_name}</td>
-                  <td>{car.price_per_day}</td>
-                  <td>{car.fuel_type}</td>
-                  <td>{car.model_year}</td>
-                  <td>{car.seating_capacity}</td>
-                  <td><Link to={`/UpdateVehicle/${car.license_no}`} className="btn btn-primary rounded">Update Vehicle Info</Link></td>
-                  <td><button className="btn btn-danger rounded" onClick={()=>handleDelete(car.license_no)}>Delete Vehicle Info</button></td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-          <Link to ="/AddVehicle" className="btn btn-primary rounded">Add Vehicle</Link>
+      <div className="bg-secondary py-5 mt-5">
+        <div className="container bg-light rounded-5 py-5 mt-5 px-5">
+          <h1 className="text-center mb-4 fw-bold">Manage Vehicles</h1>
+          <div className="row">
+            {VehicleInfo.map((car) => (
+              <div key={car.license_no} className="col-md-4 mb-4">
+                <div className="card shadow-sm d-flex flex-column h-100">
+                  <img src={car.vehicle_image} className="card-img-top" alt={car.vehicle_name} style={{ maxHeight: '250px', objectFit: 'cover', width: '100%' }} />
+                  <div className="card-body d-flex flex-column">
+                    <h5 className="card-title fw-bold">{car.vehicle_name}</h5>
+                    <p className="card-text flex-grow-1">
+                      <strong>Price/Day:</strong> ₹{car.price_per_day}<br />
+                      <strong>Fuel Type:</strong> {car.fuel_type}<br />
+                      <strong>Model Year:</strong> {car.model_year}<br />
+                      <strong>Seating Capacity:</strong> {car.seating_capacity}
+                    </p>
+                    <div className="d-flex flex-column justify-content-between mt-2">
+                      <Link to={`/UpdateVehicle/${car.license_no}`} className="btn btn-primary mb-2 fw-bold">Update Vehicle Info</Link>
+                      <button className="btn btn-danger mb-2 fw-bold" onClick={() => handleDelete(car.license_no)}>Delete Vehicle</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="text-center mt-3">
+            <Link to="/AddVehicle" className="btn btn-success btn-lg mb-4 w-75 fw-bold">Add New Vehicle</Link>
+          </div>
         </div>
       </div>
     </div>
-);
+  )
 }
 
 export default Admin

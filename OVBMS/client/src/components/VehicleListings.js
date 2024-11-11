@@ -1,19 +1,15 @@
-import React, { useContext } from 'react'
-import { useState } from 'react'
-import { useEffect } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import axios from 'axios'
 import Navbar from './Navbar'
 import { Link } from 'react-router-dom'
 import { AuthContext } from './AuthContext'
 
 function VehicleListings() {
-
   const { CurrentUser } = useContext(AuthContext)
-
   const [VehicleInfo, setVehicleInfo] = useState([])
 
-  useEffect(()=>{
-    const fetchCarinfo = async()=>{
+  useEffect(() => {
+    const fetchCarinfo = async () => {
       try {
         const res = await axios.get("http://localhost:5000/VehicleListings")
         setVehicleInfo(res.data)
@@ -22,45 +18,41 @@ function VehicleListings() {
       }
     }
     fetchCarinfo()
-  },[])
+  }, [])
 
   return (
     <div>
       <Navbar />
-      <div className='d-flex bg-secondary justify-content-center align-items-center vh-100 mt-5'>
-        <div className="container text-center bg-light p-4 rounded-5 shadow">
-          <h1 className="my-4">Vehicle Listing</h1>
-          <div className='table-responsive'>
-            <table className="table table-bordered table-hover">
-              <thead className="thead-light">
-                <tr>
-                  <th>Vehicle_Image</th>
-                  <th>Vehicle_Name</th>
-                  <th>Price_Per_Day</th>
-                  <th>Fuel_Type</th>
-                  <th>Model_Year</th>
-                  <th>Seating_Capacity</th>
-                  <th>Book_The_Car</th>
-                </tr>
-              </thead>
-              <tbody>
-                {VehicleInfo.map((car) => (
-                  <tr key={car.license_no} className="align-middle">
-                    <td><img src={car.vehicle_image} className="img-fluid rounded" alt={car.vehicle_name} style={{ maxWidth: '200px', height: 'auto'}}></img></td>
-                    <td>{car.vehicle_name}</td>
-                    <td>{car.price_per_day}</td>
-                    <td>{car.fuel_type}</td>
-                    <td>{car.model_year}</td>
-                    <td>{car.seating_capacity}</td>
-                    {CurrentUser? <td><Link to="/VehicleBooking" className="btn btn-primary rounded">Book</Link></td> : <td><Link to="/UserSignIn" className="btn btn-primary rounded">Book</Link></td>}</tr>
-                ))}
-              </tbody>
-            </table>
+      <div className="bg-secondary py-5 mt-5">
+        <div className="container bg-light rounded-5 py-5 mt-5 px-5">
+          <h1 className="text-center mb-4 fw-bold">Vehicle Listings</h1>
+          <div className="row">
+            {VehicleInfo.map((car) => (
+              <div key={car.license_no} className="col-md-4 mb-4">
+                <div className="card shadow-sm d-flex flex-column h-100">
+                  <img src={car.vehicle_image} className="card-img-top" alt={car.vehicle_name} style={{ maxHeight: '250px', objectFit: 'cover', width: '100%' }} />
+                  <div className="card-body d-flex flex-column">
+                    <h5 className="card-title fw-bold">{car.vehicle_name}</h5>
+                    <p className="card-text flex-grow-1">
+                      <strong>Price/Day:</strong> ₹{car.price_per_day}<br />
+                      <strong>Fuel Type:</strong> {car.fuel_type}<br />
+                      <strong>Model Year:</strong> {car.model_year}<br />
+                      <strong>Seating Capacity:</strong> {car.seating_capacity}
+                    </p>
+                    {CurrentUser ? (
+                      <Link to={`/VehicleBooking/${car.license_no}`} className="btn btn-primary mb-2 w-100 fw-bold">Book Now</Link>
+                    ) : (
+                      <Link to="/UserSignIn" className="btn btn-secondary mb-2 w-100 fw-bold">Sign In to Book</Link>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
+        </div>
       </div>
     </div>
-   </div>
-);
+  )
 }
 
 export default VehicleListings

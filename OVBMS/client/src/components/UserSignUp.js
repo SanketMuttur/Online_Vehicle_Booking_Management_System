@@ -38,9 +38,9 @@ function UserSignUp() {
   return (
     <div>
         <div className='d-flex bg-secondary justify-content-center align-items-center vh-100'>
-            <form className='bg-light p-4 rounded-5 shadow'style={{ width: '400px' }} onSubmit={handleSubmit}>
+            <form className='bg-light p-4 rounded-5 shadow'style={{ width: '500px' }} onSubmit={handleSubmit}>
 
-                <h1 className="text-center">Sign Up</h1><br/><br/>
+                <h1 className="text-center fw-bold">Sign Up</h1><br/><br/>
 
                 <input className="form-control rounded-5" onChange={handleChange} name='name' type='text' placeholder='Name' required/><br/>
                 <input className="form-control rounded-5" onChange={handleChange} name='email' type='email' placeholder='Email' required/><br/>
@@ -48,12 +48,9 @@ function UserSignUp() {
                 <input className="form-control rounded-5" onChange={handleChange} name='licenseNumber' type='text' placeholder='License Number' required/><br/>
                 <input className="form-control rounded-5" onChange={handleChange} name='mobileNumber' type='tel' placeholder='Mobile Number' pattern="^[789]\d{9}$" title="Please enter a valid Number" required/><br/>
                 <input className="form-control rounded-5" onChange={handleChange} name='dob' type='date' placeholder='Date of Birth' required/><br/>
-                <input className="form-control rounded-5" onChange={handleChange} name='city' type='text' placeholder='City' required/><br/>
-                <input className="form-control rounded-5" onChange={handleChange} name='state' type='text' placeholder='State' required/><br/>
-                <input className="form-control rounded-5" onChange={handleChange} name='pincode' type='text' placeholder='Pincode' pattern="^\d{6}$" required/><br/><br/>
 
                 <div className='text-center'>
-                  <button type="submit" className="btn btn-primary border btn-block rounded-5 w-100">Sign Up</button><br/><br/>
+                  <button type="submit" className="btn btn-primary border btn-block rounded-5 w-100 fw-bold">Sign Up</button><br/><br/>
                   {err && (<div className="alert alert-danger" role="alert"><strong>Error:</strong> <span className="fw-bold">{err}</span></div>)}
                 </div>
 

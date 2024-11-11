@@ -39,14 +39,14 @@ function AddAdmin() {
         <div className='d-flex bg-secondary justify-content-center align-items-center vh-100'>
             <form className='bg-light p-4 rounded-5 shadow'style={{ width: '400px' }} onSubmit={handleSubmit}>
 
-                <h1 className="text-center">Add Admin</h1><br/><br/>
+                <h1 className="text-center fw-bold">Add Admin</h1><br/><br/>
 
                 <input className="form-control rounded-5" onChange={handleChange} name='name' type='text' placeholder='Admin Name' required/><br/>
                 <input className="form-control rounded-5" onChange={handleChange} name='email' type='email' placeholder='Admin Email' required/><br/>
                 <input className="form-control rounded-5" onChange={handleChange} name='password' type='password' placeholder='Admin Password' required/><br/>
                 
                 <div className='text-center'>
-                  <button type="submit" className="btn btn-primary border btn-block rounded-5 w-100">Add Admin</button><br/><br/>
+                  <button type="submit" className="btn btn-primary border btn-block rounded-5 w-100 fw-bold">Add Admin</button><br/><br/>
                   {err && (<div className="alert alert-danger" role="alert"><strong>Error:</strong> <span className="fw-bold">{err}</span></div>)}
                 </div>
 

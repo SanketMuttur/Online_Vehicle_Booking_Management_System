@@ -28,7 +28,7 @@ export default function App() {
           <Route path='/UserSignIn' element={<UserSignIn/>}/>
           <Route path='/UserSignUp' element={<UserSignUp/>}/>
           <Route path='/UserProfile' element={<ProtectedUserRoute element={<UserProfile />} />} />
-          <Route path='/VehicleBooking' element={<ProtectedUserRoute element={<VehicleBooking />} />} />
+          <Route path='/VehicleBooking/:id' element={<ProtectedUserRoute element={<VehicleBooking />} />} />
           <Route path='/AdminLogin' element={<AdminLogin/>}/>
           <Route path='/Admin' element={<ProtectedAdminRoute element={<Admin />} />} />
           <Route path='/AdminProfile' element={<ProtectedAdminRoute element={<AdminProfile />} />} />

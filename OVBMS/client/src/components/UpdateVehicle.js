@@ -69,7 +69,7 @@ function UpdateVehicles() {
   return (
     <div className='d-flex bg-secondary justify-content-center align-items-center vh-100'>
         <form className='bg-light p-4 rounded-5 shadow'style={{ width: '500px' }} onSubmit={handleSubmit}>
-            <h1 className="text-center">Update Vehicle Info</h1><br/><br/>
+            <h1 className="text-center fw-bold">Update Vehicle Info</h1><br/><br/>
             <input className="form-control rounded-5" value={VehicleInfo.License_No} type='text' placeholder='License_No' onChange={handleChange} name='License_No' required/><br/>
             <input className="form-control rounded-5" value={VehicleInfo.Vehicle_Name} type='text' placeholder='Vehicle_Name' onChange={handleChange} name='Vehicle_Name' required/><br/>
             <input className="form-control rounded-5" value={VehicleInfo.Model_Year} type='year' placeholder='Model_Year' onChange={handleChange} name='Model_Year' required/><br/>
@@ -79,7 +79,7 @@ function UpdateVehicles() {
             <input className="form-control rounded-5" value={VehicleInfo.Vehicle_Image} type='text' placeholder='Vehicle_Image' onChange={handleChange} name='Vehicle_Image'/><br/>
             <textarea className="form-control rounded-5" value={VehicleInfo.Vehicle_Overview} rows="3" cols="40" placeholder='Vehicle_Overview' onChange={handleChange} name='Vehicle_Overview'/><br/>
             <div className='text-center'>
-                <button type='submit' className="btn btn-primary border btn-block rounded-5 w-100">Update Vehicle</button>
+                <button type='submit' className="btn btn-primary border btn-block rounded-5 w-100 fw-bold">Update Vehicle</button>
             </div><br/>
         </form>
     </div>

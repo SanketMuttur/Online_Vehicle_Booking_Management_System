@@ -37,13 +37,13 @@ function UserSignIn() {
         <div className='d-flex bg-secondary justify-content-center align-items-center vh-100'>
             <form className='bg-light p-4 rounded-5 shadow' style={{ width: '400px' }} onSubmit={handleSubmit}> 
 
-                <h1 className="text-center">Sign In</h1><br/><br/>
+                <h1 className="text-center fw-bold">Sign In</h1><br/><br/>
 
                 <input className="form-control rounded-5" onChange={handleChange} name='email' type='email' placeholder='EmailID' required/><br/>
-                <input className="form-control rounded-5" onChange={handleChange} name='password' type='password' placeholder='Password' required/><br/><br/>
+                <input className="form-control rounded-5" onChange={handleChange} name='password' type='password' placeholder='Password' required/><br/>
 
                 <div className='text-center'>
-                    <button type="submit" className="btn btn-primary border btn-block rounded-5 w-100">Sign In</button><br/><br/>
+                    <button type="submit" className="btn btn-primary border btn-block rounded-5 w-100 fw-bold">Sign In</button><br/><br/>
                     {err && (<div className="alert alert-danger" role="alert"><strong>Error:</strong> <span className="fw-bold">{err}</span></div>)}
                 </div>
 

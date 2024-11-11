@@ -55,17 +55,14 @@ app.post("/UserSignUp", (req, res)=>{
         const salt = bcrypt.genSaltSync(10)
         const hashPassword = bcrypt.hashSync(req.body.password, salt)
         
-        const q = 'insert into customer (email, name, password, license_id, mobile_no, dob, city, state, pincode) values (?)';
+        const q = 'insert into customer (email, name, password, license_id, mobile_no, dob) values (?)';
         const values = [
             req.body.email,
             req.body.name,
             hashPassword,
             req.body.licenseNumber,
             req.body.mobileNumber,
-            req.body.dob,
-            req.body.city,
-            req.body.state,
-            req.body.pincode
+            req.body.dob
         ]
     
         db.query(q, [values], (err, data)=>{
@@ -105,6 +102,29 @@ app.post("/UserSignOut", (req, res) => {
         secure:true
     }).status(200).json("User has been Logged Out!")
 })
+
+app.get("/VehicleBooking/:id", userAuthenticateToken, (req, res) => {
+    const vehicle_license_no = req.params.id
+    const q = 'SELECT * FROM vehicles WHERE License_No = ?'
+
+    db.query(q, [vehicle_license_no], (err, data) => {
+        if (err) return res.json(err)
+        return res.json(data[0])
+    });
+});
+
+app.post("/VehicleBooking/:id", userAuthenticateToken, async (req, res) => {
+    const customer_email = req.user.id;
+    const vehicle_license_no = req.params.id
+    const {from_date, to_date } = req.body;
+    
+    const query = "CALL BookVehicle(?, ?, ?, ?)";
+    
+    db.query(query, [customer_email, vehicle_license_no, from_date, to_date], (err, data) => {
+        if (err) return res.status(500).json("Error processing booking request.");
+        res.status(200).json("Booking request submitted successfully.");
+    });
+});
 
 app.post("/AdminLogin", (req, res) =>{
     const q = 'select * from manager where email = ?';
@@ -178,7 +198,7 @@ app.get("/VehicleListings",(req, res)=>{
 })
 
 app.post("/AddVehicle", adminAuthenticateToken, (req, res)=>{
-    const q = 'insert into vehicles (License_No, Vehicle_Name, Model_Year, Price_Per_Day, Seating_Capacity, Fuel_Type, Vehicle_Image, Vehicle_Overview) values (?)';
+    const q = 'insert into vehicles (License_No, Vehicle_Name, Model_Year, Price_Per_Day, Seating_Capacity, Fuel_Type, Vehicle_Image, Vehicle_Overview, manager_id) values (?)';
     const values = [
         req.body.License_No,
         req.body.Vehicle_Name,
@@ -187,7 +207,8 @@ app.post("/AddVehicle", adminAuthenticateToken, (req, res)=>{
         req.body.Seating_Capacity,
         req.body.Fuel_Type,
         req.body.Vehicle_Image,
-        req.body.Vehicle_Overview
+        req.body.Vehicle_Overview,
+        req.user.id
     ]
 
     db.query(q, [values], (err, data)=>{
@@ -218,7 +239,7 @@ app.get("/UpdateVehicle/:id", adminAuthenticateToken, (req, res) => {
 
 app.put("/UpdateVehicle/:id", adminAuthenticateToken, (req, res) => {
     const vehicle_license_no = req.params.id
-    const q = 'update vehicles set `License_No`=?, `Vehicle_Name`=?, `Model_Year`=?, `Price_Per_Day`=?, `Seating_Capacity`=?, `Fuel_Type`=?, `Vehicle_Image`=?, `Vehicle_Overview`=? where License_No = ?'
+    const q = 'update vehicles set `License_No`=?, `Vehicle_Name`=?, `Model_Year`=?, `Price_Per_Day`=?, `Seating_Capacity`=?, `Fuel_Type`=?, `Vehicle_Image`=?, `Vehicle_Overview`=?, `manager_id`=? where License_No = ?'
 
     const values = [
         req.body.License_No,
@@ -228,7 +249,8 @@ app.put("/UpdateVehicle/:id", adminAuthenticateToken, (req, res) => {
         req.body.Seating_Capacity,
         req.body.Fuel_Type,
         req.body.Vehicle_Image,
-        req.body.Vehicle_Overview
+        req.body.Vehicle_Overview,
+        req.user.id
     ]
 
     db.query(q, [...values, vehicle_license_no], (err, data) => {

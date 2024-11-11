@@ -39,8 +39,8 @@ function AddVehicle() {
 
   return (
     <div className='d-flex bg-secondary justify-content-center align-items-center vh-100'>
-        <form className='bg-light p-4 rounded-5 shadow'style={{ width: '500px' }} onSubmit={handleSubmit}>
-            <h1 className="text-center">Add New Vehicle</h1><br/><br/>
+        <form className='container bg-light p-4 rounded-5 shadow'style={{ width: '500px' }} onSubmit={handleSubmit}>
+            <h1 className="text-center fw-bold">Add New Vehicle</h1><br/><br/>
             <input className="form-control rounded-5" type='text' placeholder='License_No' onChange={handleChange} name='License_No' required/><br/>
             <input className="form-control rounded-5" type='text' placeholder='Vehicle_Name' onChange={handleChange} name='Vehicle_Name' required/><br/>
             <input className="form-control rounded-5" type='year' placeholder='Model_Year' onChange={handleChange} name='Model_Year' required/><br/>
@@ -50,7 +50,7 @@ function AddVehicle() {
             <input className="form-control rounded-5" type='text' placeholder='Vehicle_Image' onChange={handleChange} name='Vehicle_Image'/><br/>
             <textarea className="form-control rounded-5" rows="3" cols="40" placeholder='Vehicle_Overview' onChange={handleChange} name='Vehicle_Overview'/><br/>
             <div className='text-center'>
-                <button type='submit' className="btn btn-primary border btn-block rounded-5 w-100">Add Vehicle</button>
+                <button type='submit' className="btn btn-primary border btn-block rounded-5 w-100 fw-bold">Add Vehicle</button>
             </div><br/>
         </form>
     </div>
