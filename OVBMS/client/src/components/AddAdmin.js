@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
+import AdminNavbar from './AdminNavbar'
 
 function AddAdmin() {
   
@@ -36,8 +37,9 @@ function AddAdmin() {
 
   return (
     <div>
-        <div className='d-flex bg-secondary justify-content-center align-items-center vh-100'>
-            <form className='bg-light p-4 rounded-5 shadow'style={{ width: '400px' }} onSubmit={handleSubmit}>
+      <AdminNavbar />
+        <div className='d-flex bg-light justify-content-center align-items-center vh-100 py-5'>
+            <form className='bg-light p-4 rounded-5 shadow-lg'style={{ width: '400px' }} onSubmit={handleSubmit}>
 
                 <h1 className="text-center fw-bold">Add Admin</h1><br/><br/>
 

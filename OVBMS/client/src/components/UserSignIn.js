@@ -34,8 +34,8 @@ function UserSignIn() {
 
   return (
     <div>
-        <div className='d-flex bg-secondary justify-content-center align-items-center vh-100'>
-            <form className='bg-light p-4 rounded-5 shadow' style={{ width: '400px' }} onSubmit={handleSubmit}> 
+        <div className='d-flex bg-light justify-content-center align-items-center vh-100'>
+            <form className='bg-light p-4 rounded-5 shadow-lg' style={{ width: '400px' }} onSubmit={handleSubmit}> 
 
                 <h1 className="text-center fw-bold">Sign In</h1><br/><br/>
 

@@ -61,7 +61,7 @@ function VehicleBooking() {
     <div>
       <Navbar />
       <div className="container mt-5">
-        <h1 className="text-center mb-4 px-5 py-5">Book {vehicle.vehicle_name}</h1>
+        <h1 className="text-center mb-4 px-5 py-5 fw-bold">Book {vehicle.vehicle_name}</h1>
         <div className="row d-flex align-items-stretch">
           <div className="col-md-6 d-flex">
             <img src={vehicle.vehicle_image} alt={vehicle.vehicle_name} className="img-fluid shadow-lg rounded" style={{ maxHeight: '350px', objectFit: 'cover', height: '100%', width: '100%', borderRadius: '10px' }} />

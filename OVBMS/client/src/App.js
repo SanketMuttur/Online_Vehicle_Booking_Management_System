@@ -14,6 +14,7 @@ import AddAdmin from './components/AddAdmin';
 import AdminProfile from './components/AdminProfile';
 import { AdminAuthContext } from './components/AdminAuthContext';
 import { AuthContext } from './components/AuthContext';
+import BookingRequest from './components/BookingRequest';
 
 
 export default function App() {
@@ -35,6 +36,7 @@ export default function App() {
           <Route path='/AddAdmin' element={<ProtectedAdminRoute element={<AddAdmin />} />} />
           <Route path='/AddVehicle' element={<ProtectedAdminRoute element={<AddVehicle />} />} />
           <Route path="/UpdateVehicle/:id" element={<ProtectedAdminRoute element={<UpdateVehicle />} />} />
+          <Route path="/BookingRequest" element={<ProtectedAdminRoute element={<BookingRequest />} />} />
         </Routes>
       </BrowserRouter>
     </div>
