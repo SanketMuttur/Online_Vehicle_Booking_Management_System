@@ -46,7 +46,7 @@ function UpdateVehicles() {
             }
         };
         fetchVehicleInfo();
-    }, [vehicle_license_no]);
+    }, [vehicle_license_no, navigate]);
 
     const handleChange = (e) => {
         setVehicleInfo((prev) => ({...prev, [e.target.name]: e.target.value}))

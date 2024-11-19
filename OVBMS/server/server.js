@@ -33,17 +33,25 @@ const userAuthenticateToken = (req, res, next) => {
 
 
 {/* Connection to Database */}
-const db = mysql.createConnection({
+
+const ClientDB = mysql.createConnection({
     host:"localhost",
-    user:"root",
-    password:"root",
+    user:"client",
+    password:"client",
+    database:"ovbms"
+})
+
+const AdminDB = mysql.createConnection({
+    host:"localhost",
+    user:"admin",
+    password:"admin",
     database:"ovbms"
 })
 
 {/* Connecting with Frontend */}
 
 app.use(cors({
-    origin: "http://localhost:3000",
+    origin: ["http://localhost:3000","http://localhost:4000"],
     credentials: true
 }))
 app.use(express.json());
@@ -56,7 +64,7 @@ app.post("/UserSignUp", (req, res)=>{
 
     const q = 'select * from customer where email = ?'
 
-    db.query(q, [req.body.email], (err, data) =>{
+    ClientDB.query(q, [req.body.email], (err, data) =>{
         if(err) return res.json(err)
         if(data.length) return res.status(409).json("User already exists!")
 
@@ -73,7 +81,7 @@ app.post("/UserSignUp", (req, res)=>{
             req.body.dob
         ]
     
-        db.query(q, [values], (err, data)=>{
+        ClientDB.query(q, [values], (err, data)=>{
             if(err) return res.json(err)
             return res.status(200).json("User Signed up succesfully!!")
         })
@@ -84,7 +92,7 @@ app.post("/UserSignUp", (req, res)=>{
 app.post("/UserSignIn", (req, res) =>{
     const q = 'select * from customer where email = ?';
 
-    db.query(q, [req.body.email], (err, data) => {
+    ClientDB.query(q, [req.body.email], (err, data) => {
         if (err) return res.json(err)
         if (data.length === 0) return res.status(404).json("User not found!")
         console.log(data[0])
@@ -113,7 +121,16 @@ app.post("/UserSignOut", (req, res) => {
 
 app.get("/VehicleListings",(req, res)=>{
     const q = `SELECT * FROM ovbms.vehicles where availability in ('Available','Waiting')`
-    db.query(q, (err, data)=>{
+    ClientDB.query(q, (err, data)=>{
+        if(err) return res.json(err)
+        return res.json(data)
+    })
+})
+
+app.get("/UserProfile", userAuthenticateToken,(req, res)=>{
+    const user = req.user.id;
+    const q = `SELECT * FROM ovbms.booking_requests where customer_id = ?`
+    ClientDB.query(q, user, (err, data)=>{
         if(err) return res.json(err)
         return res.json(data)
     })
@@ -123,7 +140,7 @@ app.get("/VehicleBooking/:id", userAuthenticateToken, (req, res) => {
     const vehicle_license_no = req.params.id
     const q = 'SELECT * FROM vehicles WHERE License_No = ?'
 
-    db.query(q, [vehicle_license_no], (err, data) => {
+    ClientDB.query(q, [vehicle_license_no], (err, data) => {
         if (err) return res.json(err)
         return res.json(data[0])
     });
@@ -136,7 +153,7 @@ app.post("/VehicleBooking/:id", userAuthenticateToken, async (req, res) => {
     
     const query = "CALL BookVehicle(?, ?, ?, ?)";
     
-    db.query(query, [customer_email, vehicle_license_no, from_date, to_date], (err, data) => {
+    ClientDB.query(query, [customer_email, vehicle_license_no, from_date, to_date], (err, data) => {
         if (err) return res.status(500).json("Error processing booking request.");
         res.status(200).json("Booking request submitted successfully.");
     });
@@ -148,7 +165,7 @@ app.post("/VehicleBooking/:id", userAuthenticateToken, async (req, res) => {
 app.post("/AdminLogin", (req, res) =>{
     const q = 'select * from manager where email = ?';
 
-    db.query(q, [req.body.email], (err, data) => {
+    AdminDB.query(q, [req.body.email], (err, data) => {
         if (err) return res.json(err)
         if (data.length === 0) return res.status(404).json("Admin not found!")
         console.log(data[0])
@@ -172,7 +189,7 @@ app.post("/AddAdmin", adminAuthenticateToken, (req, res)=>{
 
     const q = 'select * from manager where email = ?'
 
-    db.query(q, [req.body.email], (err, data) =>{
+    AdminDB.query(q, [req.body.email], (err, data) =>{
         if(err) return res.json(err)
         if(data.length) return res.status(409).json("Admin already exists!")
 
@@ -186,7 +203,7 @@ app.post("/AddAdmin", adminAuthenticateToken, (req, res)=>{
             hashPassword
         ]
     
-        db.query(q, [values], (err, data)=>{
+        AdminDB.query(q, [values], (err, data)=>{
             if(err) return res.json(err)
             return res.status(200).json("Added Admin succesfully!!")
         })
@@ -202,7 +219,7 @@ app.post("/AdminLogout", adminAuthenticateToken, (req, res) => {
 
 app.get("/Admin", adminAuthenticateToken, (req, res)=>{
     const q = `SELECT * FROM ovbms.vehicles where availability in ('Available','Waiting')`
-    db.query(q, (err, data)=>{
+    AdminDB.query(q, (err, data)=>{
         if(err) return res.json(err)
         return res.json(data)
     })
@@ -222,7 +239,7 @@ app.post("/AddVehicle", adminAuthenticateToken, (req, res)=>{
         req.user.id
     ]
 
-    db.query(q, [values], (err, data)=>{
+    AdminDB.query(q, [values], (err, data)=>{
         if(err) return res.json(err)
         return res.json(data)
     })
@@ -232,7 +249,7 @@ app.delete("/Admin/:id", adminAuthenticateToken, (req, res) => {
     const License_No = req.params.id
     const q = 'delete from vehicles where license_no = ?'
 
-    db.query(q, [License_No], (err, data) => {
+    AdminDB.query(q, [License_No], (err, data) => {
         if (err) return res.json(err)
         return res.json("Vehicle Deleted")
     })
@@ -242,7 +259,7 @@ app.get("/UpdateVehicle/:id", adminAuthenticateToken, (req, res) => {
     const vehicle_license_no = req.params.id
     const q = 'SELECT * FROM vehicles WHERE License_No = ?'
 
-    db.query(q, [vehicle_license_no], (err, data) => {
+    AdminDB.query(q, [vehicle_license_no], (err, data) => {
         if (err) return res.json(err)
         return res.json(data[0])
     });
@@ -264,7 +281,7 @@ app.put("/UpdateVehicle/:id", adminAuthenticateToken, (req, res) => {
         req.user.id
     ]
 
-    db.query(q, [...values, vehicle_license_no], (err, data) => {
+    AdminDB.query(q, [...values, vehicle_license_no], (err, data) => {
         if (err) return res.json(err)
         return res.json("Vehicle Info has been Updated Successfully")
     })
@@ -278,7 +295,7 @@ app.get("/AdminDashboard", adminAuthenticateToken, (req, res) => {
             (SELECT COUNT(*) FROM booking_requests) as total_bookings
     `;
     
-    db.query(q, (err, data) => {
+    AdminDB.query(q, (err, data) => {
         if (err) {
             console.error("Database error:", err);
             return res.status(500).json("Error fetching dashboard stats");
@@ -296,7 +313,7 @@ app.get("/BookingRequest", adminAuthenticateToken, (req, res) => {
         join vehicles v on br.vehicle_id = v.license_no 
         order by br.request_date desc`
 
-    db.query(q, (err, data) => {
+    AdminDB.query(q, (err, data) => {
         if (err) return res.json(err)
         return res.json(data)
     })
@@ -308,7 +325,7 @@ app.post("/BookingRequest/:requestId", adminAuthenticateToken, (req, res) => {
     const managerId = req.user.id
 
     const q = 'CALL HandleBookingRequest(?, ?, ?)'
-    db.query(q, [requestId, action, managerId], (err, data) => {
+    AdminDB.query(q, [requestId, action, managerId], (err, data) => {
         if (err) return res.status(500).json(err)
         return res.status(200).json(data)
     })

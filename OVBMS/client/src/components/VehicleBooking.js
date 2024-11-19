@@ -67,7 +67,7 @@ function VehicleBooking() {
             <img src={vehicle.vehicle_image} alt={vehicle.vehicle_name} className="img-fluid shadow-lg rounded" style={{ maxHeight: '350px', objectFit: 'cover', height: '100%', width: '100%', borderRadius: '10px' }} />
           </div>
           <div className="col-md-6 d-flex">
-            <div className="card shadow p-4 w-100 d-flex">
+            <div className="card shadow p-4 w-100 d-flex mb-5">
               <div className="card-body d-flex flex-column justify-content-between" style={{ height: '100%' }}>
                 <h4 className="card-title fw-bold">Vehicle Details for {vehicle.vehicle_name}</h4><br/>
                 <h5><strong>Price per Day: ₹{vehicle.price_per_day} </strong></h5><br/>

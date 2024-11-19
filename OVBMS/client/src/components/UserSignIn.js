@@ -1,5 +1,5 @@
 import React, {useContext, useState} from 'react'
-import axios from 'axios'
+// import axios from 'axios'
 import { useNavigate, Link } from 'react-router-dom'
 import { AuthContext } from './AuthContext'
 
@@ -48,7 +48,6 @@ function UserSignIn() {
                 </div>
 
                 <p className="text-center mt-3">Don't have an account? <Link to='/UserSignUp'>Sign up</Link></p>
-                <p className="text-center mt-3"><Link to='/AdminLogin'>Admin Login</Link></p>
             </form>
         </div>
     </div>

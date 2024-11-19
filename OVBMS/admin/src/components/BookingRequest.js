@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import AdminNavbar from './AdminNavbar';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 function BookingRequest() {
     const navigate = useNavigate();
@@ -44,7 +44,7 @@ function BookingRequest() {
             }
         }
         fetchBookingRequests()
-    }, [])
+    }, [navigate])
 
     if (error) return (
         <>
@@ -114,7 +114,7 @@ function BookingRequest() {
                 {/* Booking Requests */}
                 <div className="row mt-4">
                     <div className="col-12">
-                        <div className="card shadow-lg">
+                        <div className="card shadow-lg mb-5">
                             <div className="card-header">
                                 <h2 className="fw-bold text-center">Booking Requests</h2>
                             </div>
@@ -163,7 +163,7 @@ function BookingRequest() {
                                                             </>
                                                         ) : (
                                                             <td colSpan={2}>
-                                                                <span className={`badge bg-light shadow-sm fs-6 w-100 d-inline-block text-center ${request.request_status === 'Approved' ? 'text-success' : 'text-danger'}`}>
+                                                                <span className={`badge bg-light shadow-sm fs-6 w-100 d-inline-block text-center ${request.request_status === 'Approved' ? 'text-success' : request.request_status === 'Completed' ? 'text-primary' : 'text-danger'}`}>
                                                                     {request.request_status}
                                                                 </span>
                                                             </td>
