@@ -226,7 +226,9 @@ app.get("/Admin", adminAuthenticateToken, (req, res)=>{
 })
 
 app.post("/AddVehicle", adminAuthenticateToken, (req, res)=>{
-    const q = 'insert into vehicles (License_No, Vehicle_Name, Model_Year, Price_Per_Day, Seating_Capacity, Fuel_Type, Vehicle_Image, Vehicle_Overview, manager_id) values (?)';
+    const q = `insert into vehicles 
+        (License_No, Vehicle_Name, Model_Year, Price_Per_Day, Seating_Capacity, Fuel_Type, Vehicle_Image, Vehicle_Overview, manager_id) 
+        values (?)`;
     const values = [
         req.body.License_No,
         req.body.Vehicle_Name,
@@ -267,7 +269,20 @@ app.get("/UpdateVehicle/:id", adminAuthenticateToken, (req, res) => {
 
 app.put("/UpdateVehicle/:id", adminAuthenticateToken, (req, res) => {
     const vehicle_license_no = req.params.id
-    const q = 'update vehicles set `License_No`=?, `Vehicle_Name`=?, `Model_Year`=?, `Price_Per_Day`=?, `Seating_Capacity`=?, `Fuel_Type`=?, `Vehicle_Image`=?, `Vehicle_Overview`=?, `manager_id`=? where License_No = ?'
+    const q = `
+    UPDATE vehicles 
+    SET 
+        \`License_No\` = ?, 
+        \`Vehicle_Name\` = ?, 
+        \`Model_Year\` = ?, 
+        \`Price_Per_Day\` = ?, 
+        \`Seating_Capacity\` = ?, 
+        \`Fuel_Type\` = ?, 
+        \`Vehicle_Image\` = ?, 
+        \`Vehicle_Overview\` = ?, 
+        \`manager_id\` = ? 
+    WHERE License_No = ?
+`
 
     const values = [
         req.body.License_No,
